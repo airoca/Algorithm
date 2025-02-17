@@ -6,7 +6,7 @@ public class Main {
 	static BufferedReader br;
 	static BufferedWriter bw;
 	static int base;
-	static long[] indexTree;
+	static int[] indexTree;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -20,7 +20,7 @@ public class Main {
 			base <<= 1;
 		}
 		
-		indexTree = new long[base * 2];
+		indexTree = new int[base * 2];
 		
 		StringTokenizer st;
 		
@@ -28,11 +28,11 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			if (a == 1) {
-				long b = Long.parseLong(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
 				bw.write(pick(b) + "\n");
 			} else {
 				int b = Integer.parseInt(st.nextToken());
-				long c = Long.parseLong(st.nextToken());
+				int c = Integer.parseInt(st.nextToken());
 				update(b,c);
 			}
 		}
@@ -42,7 +42,7 @@ public class Main {
 		bw.close();
 	}
 	
-	private static void update(int index, long value) {
+	private static void update(int index, int value) {
 		index = index + base - 1;
 		indexTree[index] += value;
 		
@@ -52,7 +52,7 @@ public class Main {
 		}
 	}
 	
-	private static int pick(long rank) {
+	private static int pick(int rank) {
 		int index = 1;
 		
 		while (index < base) {
