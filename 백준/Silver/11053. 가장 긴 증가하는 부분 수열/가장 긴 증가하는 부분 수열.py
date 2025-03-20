@@ -1,10 +1,14 @@
+import bisect
+
 n = int(input())
 lst = list(map(int,input().split()))
-dp = [1]*n
+result = [lst[0]]
 
-for i in range(1,n):
-    for j in range(i):
-        if lst[i] > lst[j]:
-            dp[i] = max(dp[i], dp[j]+1)
+for num in lst:
+    if num>result[-1]:
+        result.append(num)
+    else:
+        idx = bisect.bisect_left(result, num)
+        result[idx] = num
 
-print(max(dp))
+print(len(result))
