@@ -1,39 +1,42 @@
-import sys, heapq
+import sys
+import heapq
 
 input = sys.stdin.readline
+INF = sys.maxsize
 
 v,e = map(int,input().split())
-root = int(input())
+start = int(input())
+
+heap = []
 graph = [[] for _ in range(v+1)]
-distance = [1e9] * (v+1)
-visited = [False] * (v+1)
 
-for _ in range(e):
-    start,end,weight = map(int,input().split())
-    graph[start].append((end, weight))
+for i in range(e):
+    from_node, dest_node, weight = map(int,input().split())
+    graph[from_node].append((dest_node,weight))
 
-def dijkstra(root):
-    queue = []
-    heapq.heappush(queue, (0,root))
-    distance[root] = 0
+def dijkstra(start):
+    distance = [INF] * (v+1)
+    distance[start] = 0
+    heap = []
+    heapq.heappush(heap,(0,start))
 
-    while queue:
-        weight, cur = heapq.heappop(queue)
+    while heap:
+        current_dist, current_node = heapq.heappop(heap)
 
-        if visited[cur]:
+        if distance[current_node] < current_dist:
             continue
 
-        visited[cur] = True
+        for next_node, weight in graph[current_node]:
+            if current_dist + weight < distance[next_node]:
+                distance[next_node] = current_dist + weight
+                heapq.heappush(heap, (distance[next_node], next_node))
 
-        for nxt in graph[cur]:
-            if distance[nxt[0]] > weight + nxt[1]:
-                distance[nxt[0]] = weight + nxt[1]
-                heapq.heappush(queue, (distance[nxt[0]], nxt[0]))
+    return distance
 
-dijkstra(root)
+distance = dijkstra(start)
 
 for i in range(1,v+1):
-    if distance[i] == 1e9:
+    if (distance[i] == INF):
         print("INF")
     else:
         print(distance[i])
