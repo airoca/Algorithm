@@ -4,31 +4,45 @@ def solution(operations):
     answer = []
     min_heap = []
     max_heap = []
+    visited = [False] * len(operations)
+    
+    idx = 0
     
     for op in operations:
-        op1, op2 = op.split()
-        op2 = int(op2)
-        if op1 == "I":
-            heapq.heappush(min_heap, op2)
-            heapq.heappush(max_heap, -op2)
+        cmd, num = op.split()
+        num = int(num)
+        
+        if cmd == "I":
+            heapq.heappush(min_heap, (num, idx))
+            heapq.heappush(max_heap, (-num, idx))
+            visited[idx] = True
+            idx += 1
+            
+        elif num == 1:
+            while max_heap and not visited[max_heap[0][1]]:
+                heapq.heappop(max_heap)
+            
+            if max_heap:
+                visited[max_heap[0][1]] = False
+                heapq.heappop(max_heap)
+            
         else:
-            if not min_heap:
-                continue
-            elif len(min_heap) == 1:
-                min_heap.pop()
-                max_heap.pop()
-            elif op2 == 1:
-                max_val = heapq.heappop(max_heap)
-                min_heap.remove(-max_val)
-            else:
-                min_val = heapq.heappop(min_heap)
-                max_heap.remove(-min_val)
+            while min_heap and not visited[min_heap[0][1]]:
+                heapq.heappop(min_heap)
+            
+            if min_heap:
+                visited[min_heap[0][1]] = False
+                heapq.heappop(min_heap)
+    
+    while max_heap and not visited[max_heap[0][1]]:
+        heapq.heappop(max_heap)
+    
+    while min_heap and not visited[min_heap[0][1]]:
+        heapq.heappop(min_heap)
     
     if not min_heap:
         answer = [0,0]
     else:
-        max_val = heapq.heappop(max_heap)
-        min_val = heapq.heappop(min_heap)
-        answer = [-max_val, min_val]
+        answer = [-max_heap[0][0], min_heap[0][0]]
     
     return answer
