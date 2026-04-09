@@ -32,7 +32,12 @@ int solution(int n, vector<vector<int>> edge) {
         }
     }
     
-    cost[0] = 0;
+    for (int i = 0; i < n+1; i++) {
+        if (cost[i] == INF) {
+            cost[i] = 0;
+        }
+    }
+    
     int max = *max_element(cost.begin(), cost.end());
     answer = count(cost.begin(), cost.end(), max);
     
