@@ -1,32 +1,43 @@
-#include<vector>
-#include<queue>
+#include<bits/stdc++.h>
 using namespace std;
 
 int solution(vector<vector<int> > maps)
 {
+    
     int n = maps.size();
     int m = maps[0].size();
-    queue<pair<int,int>> q;
+    
     int dx[] = {1,-1,0,0};
     int dy[] = {0,0,1,-1};
     
-    q.push({0,0});
+    deque<vector<int>> queue;
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
     
-    while (q.size() > 0) {
-        auto [x,y] = q.front();
-        q.pop();
+    visited[0][0] = true;
+    queue.push_back({0, 0, 1});
+    
+    while (!queue.empty()) {
+        auto cur = queue.front();
+        queue.pop_front();
+        
+        int x = cur[0];
+        int y = cur[1];
+        int cost = cur[2];
         
         if (x == n-1 && y == m-1) {
-            return maps[x][y];
+            return cost;
         }
         
-        for (int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
+            
             if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-            if (maps[nx][ny] != 1) continue;
-            maps[nx][ny] = maps[x][y] + 1;
-            q.push({nx,ny});
+            
+            if (!visited[nx][ny] && maps[nx][ny] != 0) {
+                visited[nx][ny] = true;
+                queue.push_back({nx, ny, cost + 1});
+            }
         }
     }
     
