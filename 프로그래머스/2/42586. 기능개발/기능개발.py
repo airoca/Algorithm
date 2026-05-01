@@ -1,24 +1,24 @@
 from collections import deque
 
 def solution(progresses, speeds):
-    
-    queue = deque()
     answer = []
+    queue = deque()
     
     for i in range(len(progresses)):
-        queue.append((100 - progresses[i] - 1) // speeds[i] + 1)
+        day = (100 - progresses[i] + speeds[i] - 1) // speeds[i]
+        queue.append(day)
     
     cur_day = queue.popleft()
     count = 1
     
     while queue:
-        days = queue.popleft()
-        if cur_day < days:
-            cur_day = days
-            answer.append(count)
-            count = 1
-        else:
+        day = queue.popleft()
+        if day <= cur_day:
             count += 1
+        else:
+            answer.append(count)
+            cur_day = day
+            count = 1
     
     answer.append(count)
     
